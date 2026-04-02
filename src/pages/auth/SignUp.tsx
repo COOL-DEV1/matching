@@ -40,6 +40,7 @@ export function SignUp() {
       email: data.email,
       password: data.password,
       options: {
+        emailRedirectTo: `${window.location.origin}/login`,
         data: {
           nickname: data.nickname,
           birth_date: data.birth_date,
