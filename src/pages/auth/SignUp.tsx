@@ -185,24 +185,32 @@ export function SignUp() {
               성별
             </label>
             <div style={{ display: "flex", gap: "10px" }}>
-              <label style={genderLabelStyle}>
-                <input
-                  {...register("gender", { required: true })}
-                  type="radio"
-                  value="male"
-                  style={{ display: "none" }}
-                />
-                <span>남성</span>
-              </label>
-              <label style={genderLabelStyle}>
-                <input
-                  {...register("gender", { required: true })}
-                  type="radio"
-                  value="female"
-                  style={{ display: "none" }}
-                />
-                <span>여성</span>
-              </label>
+              {(["male", "female"] as const).map((value) => (
+                <label
+                  key={value}
+                  style={{
+                    flex: 1,
+                    padding: "12px",
+                    background: "#1a1a1a",
+                    border: "1px solid #2a2a2a",
+                    borderRadius: "10px",
+                    color: "#aaa",
+                    fontSize: "14px",
+                    textAlign: "center",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                  }}>
+                  <input
+                    {...register("gender", { required: true })}
+                    type="radio"
+                    value={value}
+                  />
+                  {value === "male" ? "남성" : "여성"}
+                </label>
+              ))}
             </div>
           </div>
 
