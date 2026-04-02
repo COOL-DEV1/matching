@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SignUp } from "./pages/auth/SignUp";
 import { Login } from "./pages/auth/Login";
+import { Home } from "./pages/home/Home";
+import { ProtectedRoute } from "./common/components/ProtectedRoute";
 
 function App() {
   return (
@@ -11,16 +13,9 @@ function App() {
         <Route
           path="/"
           element={
-            <div
-              style={{
-                background: "#0a0a0a",
-                minHeight: "100vh",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}>
-              <h1 style={{ color: "#fff" }}>Spark 홈 (준비 중)</h1>
-            </div>
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
           }
         />
       </Routes>
