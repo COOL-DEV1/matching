@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../common/hooks/useAuth";
 import { StepIndicator } from "./components/StepIndicator";
@@ -65,10 +65,10 @@ export function Onboarding() {
   const { user } = useAuth();
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [photos, setPhotos] = useState<File[]>([]);
-  const [previews, setPreviews] = useState<string[]>([]);
-  const [uploadProgress, setUploadProgress] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
+  // const [photos, setPhotos] = useState<File[]>([]);
+  // const [previews, setPreviews] = useState<string[]>([]);
+  // const [uploadProgress, setUploadProgress] = useState(false);
+  // const fileRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState<FormData>({
     nickname: "",
@@ -96,14 +96,14 @@ export function Onboarding() {
 
   const TOTAL_STEPS = 5;
 
-  const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length === 0) return;
-    const newPhotos = [...photos, ...files].slice(0, 3);
-    setPhotos(newPhotos);
-    const newPreviews = newPhotos.map((f) => URL.createObjectURL(f));
-    setPreviews(newPreviews);
-  };
+  // const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = Array.from(e.target.files || []);
+  //   if (files.length === 0) return;
+  //   const newPhotos = [...photos, ...files].slice(0, 3);
+  //   setPhotos(newPhotos);
+  //   const newPreviews = newPhotos.map((f) => URL.createObjectURL(f));
+  //   setPreviews(newPreviews);
+  // };
 
   const removePhoto = (index: number) => {
     const newPhotos = photos.filter((_, i) => i !== index);
@@ -112,33 +112,33 @@ export function Onboarding() {
     setPreviews(newPreviews);
   };
 
-  const uploadPhotos = async (): Promise<string[]> => {
-    if (!user || photos.length === 0) return [];
-    setUploadProgress(true);
-    const urls: string[] = [];
+  // const uploadPhotos = async (): Promise<string[]> => {
+  //   if (!user || photos.length === 0) return [];
+  //   setUploadProgress(true);
+  //   const urls: string[] = [];
 
-    for (const photo of photos) {
-      const ext = photo.name.split(".").pop();
-      const path = `${user.id}/${Date.now()}.${ext}`;
-      const { error } = await supabase.storage
-        .from("avatars")
-        .upload(path, photo, { upsert: true });
+  //   for (const photo of photos) {
+  //     const ext = photo.name.split(".").pop();
+  //     const path = `${user.id}/${Date.now()}.${ext}`;
+  //     const { error } = await supabase.storage
+  //       .from("avatars")
+  //       .upload(path, photo, { upsert: true });
 
-      if (!error) {
-        const { data } = supabase.storage.from("avatars").getPublicUrl(path);
-        urls.push(data.publicUrl);
-      }
-    }
+  //     if (!error) {
+  //       const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+  //       urls.push(data.publicUrl);
+  //     }
+  //   }
 
-    setUploadProgress(false);
-    return urls;
-  };
+  //   setUploadProgress(false);
+  //   return urls;
+  // };
 
   const handleSubmit = async () => {
     if (!user) return;
     setLoading(true);
 
-    const photoUrls = await uploadPhotos();
+    // const photoUrls = await uploadPhotos();
 
     const { error: profileError } = await supabase.from("profiles").upsert({
       id: user.id,
@@ -152,7 +152,7 @@ export function Onboarding() {
       smoking: form.smoking,
       drinking: form.drinking,
       relationship_style: form.relationship_style,
-      photos: photoUrls,
+      // photos: photoUrls,
     });
 
     if (profileError) {
