@@ -1,5 +1,11 @@
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { supabase } from "./lib/supabase";
 import { SignUp } from "./pages/auth/SignUp";
 import { Login } from "./pages/auth/Login";
@@ -9,17 +15,30 @@ import { ProtectedRoute } from "./common/components/ProtectedRoute";
 
 function AuthCallback() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" && session) {
-        subscription.unsubscribe();
-        navigate("/onboarding", { replace: true });
+    const handleCallback = async () => {
+      const token_hash = searchParams.get("token_hash");
+      const type = searchParams.get("type");
+
+      if (token_hash && type) {
+        const { error } = await supabase.auth.verifyOtp({
+          token_hash,
+          type: type as "email",
+        });
+
+        if (!error) {
+          navigate("/onboarding", { replace: true });
+          return;
+        }
       }
-    });
-    return () => subscription.unsubscribe();
+
+      // 토큰 없으면 로그인으로
+      navigate("/login", { replace: true });
+    };
+
+    handleCallback();
   }, []);
 
   return (
