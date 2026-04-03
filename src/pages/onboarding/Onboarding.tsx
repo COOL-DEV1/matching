@@ -65,11 +65,6 @@ export function Onboarding() {
   const { user } = useAuth();
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  // const [photos, setPhotos] = useState<File[]>([]);
-  // const [previews, setPreviews] = useState<string[]>([]);
-  // const [uploadProgress, setUploadProgress] = useState(false);
-  // const fileRef = useRef<HTMLInputElement>(null);
-
   const [form, setForm] = useState<FormData>({
     nickname: "",
     birth_date: "",
@@ -96,49 +91,9 @@ export function Onboarding() {
 
   const TOTAL_STEPS = 5;
 
-  // const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = Array.from(e.target.files || []);
-  //   if (files.length === 0) return;
-  //   const newPhotos = [...photos, ...files].slice(0, 3);
-  //   setPhotos(newPhotos);
-  //   const newPreviews = newPhotos.map((f) => URL.createObjectURL(f));
-  //   setPreviews(newPreviews);
-  // };
-
-  const removePhoto = (index: number) => {
-    const newPhotos = photos.filter((_, i) => i !== index);
-    const newPreviews = previews.filter((_, i) => i !== index);
-    setPhotos(newPhotos);
-    setPreviews(newPreviews);
-  };
-
-  // const uploadPhotos = async (): Promise<string[]> => {
-  //   if (!user || photos.length === 0) return [];
-  //   setUploadProgress(true);
-  //   const urls: string[] = [];
-
-  //   for (const photo of photos) {
-  //     const ext = photo.name.split(".").pop();
-  //     const path = `${user.id}/${Date.now()}.${ext}`;
-  //     const { error } = await supabase.storage
-  //       .from("avatars")
-  //       .upload(path, photo, { upsert: true });
-
-  //     if (!error) {
-  //       const { data } = supabase.storage.from("avatars").getPublicUrl(path);
-  //       urls.push(data.publicUrl);
-  //     }
-  //   }
-
-  //   setUploadProgress(false);
-  //   return urls;
-  // };
-
   const handleSubmit = async () => {
     if (!user) return;
     setLoading(true);
-
-    // const photoUrls = await uploadPhotos();
 
     const { error: profileError } = await supabase.from("profiles").upsert({
       id: user.id,
@@ -152,7 +107,6 @@ export function Onboarding() {
       smoking: form.smoking,
       drinking: form.drinking,
       relationship_style: form.relationship_style,
-      // photos: photoUrls,
     });
 
     if (profileError) {
@@ -323,136 +277,7 @@ export function Onboarding() {
       )}
     </div>,
 
-    // Step 1: 사진 업로드
-    <div key={1}>
-      <h2
-        style={{
-          color: "#fff",
-          fontSize: "22px",
-          fontWeight: 700,
-          marginBottom: "6px",
-        }}>
-        프로필 사진
-      </h2>
-      <p style={{ color: "#666", fontSize: "14px", marginBottom: "28px" }}>
-        최대 3장까지 올릴 수 있어요
-      </p>
-
-      <input
-        ref={fileRef}
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handlePhotoSelect}
-        style={{ display: "none" }}
-      />
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "10px",
-          marginBottom: "20px",
-        }}>
-        {[0, 1, 2].map((i) => (
-          <div key={i} style={{ position: "relative" }}>
-            {previews[i] ? (
-              <div style={{ position: "relative" }}>
-                <img
-                  src={previews[i]}
-                  alt=""
-                  style={{
-                    width: "100%",
-                    aspectRatio: "1",
-                    objectFit: "cover",
-                    borderRadius: "14px",
-                    border: "1px solid #2a2a2a",
-                  }}
-                />
-                <button
-                  onClick={() => removePhoto(i)}
-                  style={{
-                    position: "absolute",
-                    top: "6px",
-                    right: "6px",
-                    width: "22px",
-                    height: "22px",
-                    borderRadius: "50%",
-                    background: "rgba(0,0,0,0.7)",
-                    border: "none",
-                    color: "#fff",
-                    fontSize: "12px",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}>
-                  ✕
-                </button>
-                {i === 0 && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: "6px",
-                      left: "6px",
-                      background: "#7C3AED",
-                      borderRadius: "6px",
-                      padding: "2px 6px",
-                      color: "#fff",
-                      fontSize: "10px",
-                    }}>
-                    대표
-                  </div>
-                )}
-              </div>
-            ) : (
-              <button
-                onClick={() => fileRef.current?.click()}
-                style={{
-                  width: "100%",
-                  aspectRatio: "1",
-                  background: "#1a1a1a",
-                  border: "1px dashed #2a2a2a",
-                  borderRadius: "14px",
-                  cursor: "pointer",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                  color: "#444",
-                  fontSize: "12px",
-                }}>
-                <span style={{ fontSize: "24px" }}>+</span>
-                <span>사진 추가</span>
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
-
-      <div
-        style={{
-          background: "#1a1a1a",
-          border: "1px solid #2a2a2a",
-          borderRadius: "12px",
-          padding: "12px 14px",
-        }}>
-        <p
-          style={{
-            color: "#666",
-            fontSize: "12px",
-            margin: 0,
-            lineHeight: 1.6,
-          }}>
-          📸 본인 사진만 올려주세요. 타인·캐릭터 사진은 계정 정지 사유가 됩니다.
-        </p>
-      </div>
-
-      {nextBtn(photos.length === 0)}
-    </div>,
-
-    // Step 2: 자기소개 + MBTI
+    // Step 1: 자기소개 + MBTI
     <div key={1}>
       <h2
         style={{
@@ -500,7 +325,7 @@ export function Onboarding() {
       {nextBtn(!form.bio || !form.mbti)}
     </div>,
 
-    // Step 3: 라이프스타일
+    // Step 2: 라이프스타일
     <div key={2}>
       <h2
         style={{
@@ -578,7 +403,7 @@ export function Onboarding() {
       {nextBtn(!form.smoking || !form.drinking || !form.relationship_style)}
     </div>,
 
-    // Step 4: 연애 성향 (민감정보)
+    // Step 3: 연애 성향 (민감정보)
     <div key={3}>
       <h2
         style={{
@@ -685,7 +510,7 @@ export function Onboarding() {
       )}
     </div>,
 
-    // Step 5: 상대 조건
+    // Step 4: 상대 조건
     <div key={4}>
       <h2
         style={{
@@ -779,7 +604,7 @@ export function Onboarding() {
           cursor: loading || !form.seeking_gender ? "not-allowed" : "pointer",
           marginTop: "24px",
         }}>
-        {loading || uploadProgress ? "저장 중..." : "시작하기 ✦"}
+        {loading ? "저장 중..." : "시작하기 ✦"}
       </button>
     </div>,
   ];
