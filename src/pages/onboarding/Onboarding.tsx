@@ -94,7 +94,7 @@ export function Onboarding() {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  const TOTAL_STEPS = 6;
+  const TOTAL_STEPS = 5;
 
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -453,7 +453,7 @@ export function Onboarding() {
     </div>,
 
     // Step 2: 자기소개 + MBTI
-    <div key={2}>
+    <div key={1}>
       <h2
         style={{
           color: "#fff",
@@ -501,7 +501,7 @@ export function Onboarding() {
     </div>,
 
     // Step 3: 라이프스타일
-    <div key={3}>
+    <div key={2}>
       <h2
         style={{
           color: "#fff",
@@ -579,7 +579,7 @@ export function Onboarding() {
     </div>,
 
     // Step 4: 연애 성향 (민감정보)
-    <div key={4}>
+    <div key={3}>
       <h2
         style={{
           color: "#fff",
@@ -686,7 +686,7 @@ export function Onboarding() {
     </div>,
 
     // Step 5: 상대 조건
-    <div key={5}>
+    <div key={4}>
       <h2
         style={{
           color: "#fff",
