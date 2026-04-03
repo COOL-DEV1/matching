@@ -281,15 +281,3 @@ const errorStyle: React.CSSProperties = {
   fontSize: "12px",
   marginTop: "4px",
 };
-
-const genderLabelStyle: React.CSSProperties = {
-  flex: 1,
-  padding: "12px",
-  background: "#1a1a1a",
-  border: "1px solid #2a2a2a",
-  borderRadius: "10px",
-  color: "#aaa",
-  fontSize: "14px",
-  textAlign: "center",
-  cursor: "pointer",
-};
