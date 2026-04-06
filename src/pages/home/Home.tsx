@@ -82,10 +82,10 @@ export function Home() {
     return new Date().getFullYear() - new Date(birth).getFullYear();
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    window.location.href = "/login";
-  };
+  // const handleLogout = async () => {
+  //   await supabase.auth.signOut();
+  //   window.location.href = "/login";
+  // };
 
   const scoreColor = (score: number) => {
     if (score >= 80) return "#22c55e";
