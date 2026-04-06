@@ -182,7 +182,7 @@ export function Home() {
             🔄 새로고침
           </button>
           <div
-            onClick={handleLogout}
+            onClick={() => (window.location.href = "/mypage")}
             style={{
               width: "32px",
               height: "32px",
@@ -360,12 +360,13 @@ export function Home() {
           padding: "12px 0 24px",
         }}>
         {[
-          { icon: "🏠", label: "홈", active: true },
-          { icon: "💬", label: "채팅", active: false },
-          { icon: "👤", label: "MY", active: false },
-        ].map(({ icon, label, active }) => (
+          { icon: "🏠", label: "홈", path: "/" },
+          { icon: "💬", label: "채팅", path: "/chat" },
+          { icon: "👤", label: "MY", path: "/mypage" },
+        ].map(({ icon, label, path }) => (
           <div
             key={label}
+            onClick={() => (window.location.href = path)}
             style={{
               display: "flex",
               flexDirection: "column",
@@ -375,7 +376,10 @@ export function Home() {
             }}>
             <span style={{ fontSize: "22px" }}>{icon}</span>
             <span
-              style={{ fontSize: "10px", color: active ? "#C084FC" : "#555" }}>
+              style={{
+                fontSize: "10px",
+                color: label === "홈" ? "#C084FC" : "#555",
+              }}>
               {label}
             </span>
           </div>
