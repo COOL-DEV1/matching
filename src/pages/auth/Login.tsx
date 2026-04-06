@@ -18,16 +18,34 @@ export function Login() {
 
   const onSubmit = async (data: LoginForm) => {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
+    setMessage("");
+
+    const { data: authData, error } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
     });
 
     if (error) {
-      setMessage("이메일 또는 비밀번호가 올바르지 않습니다.");
-    } else {
-      window.location.href = "/";
+      if (error.message.includes("Invalid login credentials")) {
+        setMessage("이메일 또는 비밀번호가 올바르지 않아요.");
+      } else if (error.message.includes("Email not confirmed")) {
+        setMessage("이메일 인증이 필요해요. 받은 편지함을 확인해주세요.");
+      } else {
+        setMessage(error.message);
+      }
+      setLoading(false);
+      return;
     }
+
+    // 이메일 인증 여부 체크
+    if (!authData.user?.email_confirmed_at) {
+      await supabase.auth.signOut();
+      setMessage("이메일 인증이 필요해요. 받은 편지함을 확인해주세요.");
+      setLoading(false);
+      return;
+    }
+
+    window.location.href = "/";
     setLoading(false);
   };
 
@@ -109,6 +127,7 @@ export function Login() {
                 color: "#ef4444",
                 fontSize: "13px",
                 marginBottom: "16px",
+                lineHeight: 1.5,
               }}>
               {message}
             </p>
