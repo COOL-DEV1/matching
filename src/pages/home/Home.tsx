@@ -30,9 +30,13 @@ export function Home() {
   const [loading, setLoading] = useState(true);
   const [autoMatchedCount, setAutoMatchedCount] = useState(0);
   const [showNotice, setShowNotice] = useState(false);
+  const [hasProfile, setHasProfile] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (user) runMatching();
+    if (user) {
+      runMatching();
+      checkProfile();
+    }
   }, [user]);
 
   const runMatching = async () => {
@@ -63,6 +67,15 @@ export function Home() {
       console.error(e);
     }
     setLoading(false);
+  };
+
+  const checkProfile = async () => {
+    const { data } = await supabase
+      .from("profiles")
+      .select("id, nickname, gender, birth_date")
+      .eq("id", user?.id)
+      .single();
+    setHasProfile(!!data?.gender && !!data?.birth_date);
   };
 
   const getAge = (birth: string) => {
@@ -200,6 +213,42 @@ export function Home() {
           </div>
         </div>
       </div>
+
+      {/* 프로필 미완성 배너 */}
+      {hasProfile === false && (
+        <div
+          onClick={() => (window.location.href = "/onboarding")}
+          style={{
+            margin: "12px 20px 0",
+            background: "#1a1230",
+            border: "1px solid #3b1f7a",
+            borderRadius: "14px",
+            padding: "14px 16px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            cursor: "pointer",
+          }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <span style={{ fontSize: "20px" }}>✦</span>
+            <div>
+              <p
+                style={{
+                  color: "#C084FC",
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  margin: 0,
+                }}>
+                프로필을 완성해봐요
+              </p>
+              <p style={{ color: "#888", fontSize: "12px", margin: 0 }}>
+                완성할수록 매칭 확률이 높아져요
+              </p>
+            </div>
+          </div>
+          <span style={{ color: "#C084FC", fontSize: "16px" }}>→</span>
+        </div>
+      )}
 
       {/* 로딩 */}
       {loading && (

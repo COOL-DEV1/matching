@@ -6,8 +6,6 @@ type SignUpForm = {
   email: string;
   password: string;
   nickname: string;
-  birth_date: string;
-  gender: "male" | "female";
 };
 
 export function SignUp() {
@@ -20,32 +18,27 @@ export function SignUp() {
   } = useForm<SignUpForm>();
 
   const onSubmit = async (data: SignUpForm) => {
-    // 만 19세 이상 확인
-    const birth = new Date(data.birth_date);
-    const today = new Date();
-    const age = today.getFullYear() - birth.getFullYear();
-    const monthDiff = today.getMonth() - birth.getMonth();
-    const realAge =
-      monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())
-        ? age - 1
-        : age;
+    setLoading(true);
 
-    if (realAge < 19) {
-      setMessage("만 19세 이상만 가입할 수 있습니다.");
+    // 닉네임 중복 확인
+    const { data: existing } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("nickname", data.nickname)
+      .single();
+
+    if (existing) {
+      setMessage("이미 사용 중인 닉네임이에요.");
+      setLoading(false);
       return;
     }
 
-    setLoading(true);
     const { error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
-        data: {
-          nickname: data.nickname,
-          birth_date: data.birth_date,
-          gender: data.gender,
-        },
+        data: { nickname: data.nickname },
       },
     });
 
@@ -132,7 +125,7 @@ export function SignUp() {
             )}
           </div>
 
-          <div style={{ marginBottom: "16px" }}>
+          <div style={{ marginBottom: "24px" }}>
             <label
               style={{
                 color: "#aaa",
@@ -151,68 +144,6 @@ export function SignUp() {
             {errors.nickname && (
               <p style={errorStyle}>{errors.nickname.message}</p>
             )}
-          </div>
-
-          <div style={{ marginBottom: "16px" }}>
-            <label
-              style={{
-                color: "#aaa",
-                fontSize: "13px",
-                display: "block",
-                marginBottom: "6px",
-              }}>
-              생년월일
-            </label>
-            <input
-              {...register("birth_date", {
-                required: "생년월일을 입력해주세요",
-              })}
-              type="date"
-              style={inputStyle}
-            />
-            {errors.birth_date && (
-              <p style={errorStyle}>{errors.birth_date.message}</p>
-            )}
-          </div>
-
-          <div style={{ marginBottom: "24px" }}>
-            <label
-              style={{
-                color: "#aaa",
-                fontSize: "13px",
-                display: "block",
-                marginBottom: "8px",
-              }}>
-              성별
-            </label>
-            <div style={{ display: "flex", gap: "10px" }}>
-              {(["male", "female"] as const).map((value) => (
-                <label
-                  key={value}
-                  style={{
-                    flex: 1,
-                    padding: "12px",
-                    background: "#1a1a1a",
-                    border: "1px solid #2a2a2a",
-                    borderRadius: "10px",
-                    color: "#aaa",
-                    fontSize: "14px",
-                    textAlign: "center",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                  }}>
-                  <input
-                    {...register("gender", { required: true })}
-                    type="radio"
-                    value={value}
-                  />
-                  {value === "male" ? "남성" : "여성"}
-                </label>
-              ))}
-            </div>
           </div>
 
           {message && (
@@ -241,7 +172,7 @@ export function SignUp() {
               cursor: loading ? "not-allowed" : "pointer",
               opacity: loading ? 0.7 : 1,
             }}>
-            {loading ? "처리 중..." : "가입하기"}
+            {loading ? "처리 중..." : "시작하기"}
           </button>
 
           <p
