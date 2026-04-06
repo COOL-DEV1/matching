@@ -278,11 +278,17 @@ export function MyPage() {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                padding: "10px 0",
+                alignItems: "center",
+                padding: "12px 0",
                 borderBottom: "1px solid #1a1a1a",
               }}>
-              <span style={{ color: "#666", fontSize: "14px" }}>{label}</span>
-              <span style={{ color: "#fff", fontSize: "14px" }}>{value}</span>
+              <span style={{ color: "#666", fontSize: "14px", flexShrink: 0 }}>
+                {label}
+              </span>
+              <span
+                style={{ color: "#fff", fontSize: "14px", textAlign: "right" }}>
+                {value}
+              </span>
             </div>
           ))}
         </div>
