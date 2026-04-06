@@ -11,6 +11,9 @@ import { SignUp } from "./pages/auth/SignUp";
 import { Login } from "./pages/auth/Login";
 import { Home } from "./pages/home/Home";
 import { Onboarding } from "./pages/onboarding/Onboarding";
+import { Chat } from "./pages/chat/Chat";
+import { ChatList } from "./pages/chat/ChatList";
+import { MyPage } from "./pages/mypage/MyPage";
 import { ProtectedRoute } from "./common/components/ProtectedRoute";
 
 function AuthCallback() {
@@ -27,17 +30,13 @@ function AuthCallback() {
           token_hash,
           type: type as "email",
         });
-
         if (!error) {
           navigate("/onboarding", { replace: true });
           return;
         }
       }
-
-      // 토큰 없으면 로그인으로
       navigate("/login", { replace: true });
     };
-
     handleCallback();
   }, []);
 
@@ -78,6 +77,30 @@ function App() {
           element={
             <ProtectedRoute>
               <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <ChatList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat/:matchId"
+          element={
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mypage"
+          element={
+            <ProtectedRoute>
+              <MyPage />
             </ProtectedRoute>
           }
         />
