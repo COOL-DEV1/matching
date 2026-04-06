@@ -71,7 +71,11 @@ export function MyPage() {
   };
 
   const handleDeleteAccount = async () => {
-    if (!confirm("정말 탈퇴하시겠어요? 모든 데이터가 삭제됩니다.")) return;
+    const confirmed = window.confirm(
+      "회원 탈퇴를 하면 즉시 회원 정보가 삭제됩니다.\n괜찮으십니까?",
+    );
+    if (!confirmed) return;
+
     // 민감정보 먼저 삭제
     await supabase.from("user_preferences").delete().eq("user_id", user?.id);
     await supabase.from("profiles").delete().eq("id", user?.id);
