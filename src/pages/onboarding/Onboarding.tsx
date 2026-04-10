@@ -8,6 +8,7 @@ type FormData = {
   birth_date: string;
   gender: "male" | "female" | "";
   location: string;
+  city: string;
   bio: string;
   mbti: string;
   height: string;
@@ -42,24 +43,131 @@ const MBTI_LIST = [
   "ESFP",
 ];
 
-const LOCATIONS = [
-  "서울 강남구",
-  "서울 강북구",
-  "서울 마포구",
-  "서울 성동구",
-  "서울 용산구",
-  "서울 종로구",
-  "서울 송파구",
-  "서울 강서구",
-  "경기 수원",
-  "경기 성남",
-  "경기 고양",
-  "인천",
-  "부산",
-  "대구",
-  "대전",
-  "광주",
-];
+const LOCATION_DATA: Record<string, string[]> = {
+  서울: [
+    "강남구",
+    "강동구",
+    "강북구",
+    "강서구",
+    "관악구",
+    "광진구",
+    "구로구",
+    "금천구",
+    "노원구",
+    "도봉구",
+    "동대문구",
+    "동작구",
+    "마포구",
+    "서대문구",
+    "서초구",
+    "성동구",
+    "성북구",
+    "송파구",
+    "양천구",
+    "영등포구",
+    "용산구",
+    "은평구",
+    "종로구",
+    "중구",
+    "중랑구",
+  ],
+  경기: [
+    "수원시",
+    "성남시",
+    "고양시",
+    "용인시",
+    "부천시",
+    "안산시",
+    "안양시",
+    "남양주시",
+    "화성시",
+    "평택시",
+    "의정부시",
+    "시흥시",
+    "파주시",
+    "광명시",
+    "김포시",
+    "군포시",
+    "하남시",
+    "오산시",
+    "이천시",
+    "안성시",
+    "의왕시",
+    "양주시",
+    "구리시",
+    "포천시",
+  ],
+  인천: [
+    "중구",
+    "동구",
+    "미추홀구",
+    "연수구",
+    "남동구",
+    "부평구",
+    "계양구",
+    "서구",
+  ],
+  부산: [
+    "강서구",
+    "금정구",
+    "기장군",
+    "남구",
+    "동구",
+    "동래구",
+    "부산진구",
+    "북구",
+    "사상구",
+    "사하구",
+    "서구",
+    "수영구",
+    "연제구",
+    "영도구",
+    "중구",
+    "해운대구",
+  ],
+  대구: ["남구", "달서구", "달성군", "동구", "북구", "서구", "수성구", "중구"],
+  대전: ["대덕구", "동구", "서구", "유성구", "중구"],
+  광주: ["광산구", "남구", "동구", "북구", "서구"],
+  울산: ["남구", "동구", "북구", "울주군", "중구"],
+  세종: ["세종시"],
+  강원: ["춘천시", "원주시", "강릉시", "동해시", "태백시", "속초시", "삼척시"],
+  충북: ["청주시", "충주시", "제천시"],
+  충남: [
+    "천안시",
+    "공주시",
+    "보령시",
+    "아산시",
+    "서산시",
+    "논산시",
+    "계룡시",
+    "당진시",
+  ],
+  전북: ["전주시", "군산시", "익산시", "정읍시", "남원시", "김제시"],
+  전남: ["목포시", "여수시", "순천시", "나주시", "광양시"],
+  경북: [
+    "포항시",
+    "경주시",
+    "김천시",
+    "안동시",
+    "구미시",
+    "영주시",
+    "영천시",
+    "상주시",
+    "문경시",
+    "경산시",
+  ],
+  경남: [
+    "창원시",
+    "진주시",
+    "통영시",
+    "사천시",
+    "김해시",
+    "밀양시",
+    "거제시",
+    "양산시",
+  ],
+  제주: ["제주시", "서귀포시"],
+};
 
 export function Onboarding() {
   const { user } = useAuth();
@@ -70,6 +178,7 @@ export function Onboarding() {
     birth_date: "",
     gender: "",
     location: "",
+    city: "",
     bio: "",
     mbti: "",
     height: "",
@@ -100,7 +209,7 @@ export function Onboarding() {
       nickname: form.nickname,
       birth_date: form.birth_date,
       gender: form.gender,
-      location: form.location,
+      location: form.city ? `${form.location} ${form.city}` : form.location,
       bio: form.bio,
       mbti: form.mbti,
       height: form.height ? parseInt(form.height) : null,
@@ -250,15 +359,32 @@ export function Onboarding() {
         <label style={labelStyle}>지역</label>
         <select
           value={form.location}
-          onChange={(e) => set("location", e.target.value)}
-          style={{ ...inputStyle, appearance: "none" }}>
-          <option value="">지역 선택</option>
-          {LOCATIONS.map((l) => (
+          onChange={(e) => {
+            set("location", e.target.value);
+            set("city", "");
+          }}
+          style={{ ...inputStyle, appearance: "none", marginBottom: "8px" }}>
+          <option value="">시/도 선택</option>
+          {Object.keys(LOCATION_DATA).map((l) => (
             <option key={l} value={l}>
               {l}
             </option>
           ))}
         </select>
+
+        {form.location && form.location !== "세종" && (
+          <select
+            value={form.city}
+            onChange={(e) => set("city", e.target.value)}
+            style={{ ...inputStyle, appearance: "none" }}>
+            <option value="">구/시/군 선택</option>
+            {LOCATION_DATA[form.location]?.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       <div style={{ marginBottom: "16px" }}>
@@ -273,7 +399,11 @@ export function Onboarding() {
       </div>
 
       {nextBtn(
-        !form.nickname || !form.birth_date || !form.gender || !form.location,
+        !form.nickname ||
+          !form.birth_date ||
+          !form.gender ||
+          !form.location ||
+          (!form.city && form.location !== "세종"),
       )}
     </div>,
 
