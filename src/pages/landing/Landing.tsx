@@ -399,7 +399,7 @@ export function Landing() {
         <h3
           style={{
             color: "#fff",
-            fontSize: "clamp(28px, 6vw, 44px)",
+            fontSize: "clamp(28px, 6vw, 40px)",
             fontWeight: 700,
             marginBottom: "16px",
           }}>
