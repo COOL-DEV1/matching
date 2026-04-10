@@ -19,6 +19,7 @@ import { Landing } from "./pages/landing/Landing";
 import { ForgotPassword } from "./pages/auth/ForgotPassword";
 import { ResetPassword } from "./pages/auth/ResetPassword";
 import { ProfileDetail } from "./pages/profile/ProfileDetail";
+import { Admin } from "./pages/admin/Admin";
 
 function AuthCallback() {
   const navigate = useNavigate();
@@ -116,6 +117,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ProfileDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Admin />
             </ProtectedRoute>
           }
         />
