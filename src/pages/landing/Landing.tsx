@@ -399,7 +399,7 @@ export function Landing() {
         <h3
           style={{
             color: "#fff",
-            fontSize: "clamp(28px, 6vw, 48px)",
+            fontSize: "clamp(28px, 6vw, 44px)",
             fontWeight: 700,
             marginBottom: "16px",
           }}>
@@ -450,7 +450,7 @@ export function Landing() {
             이용약관
           </a>
         </div>
-        <span style={{ color: "#444", fontSize: "12px" }}>© 2025 Spark</span>
+        <span style={{ color: "#444", fontSize: "12px" }}>© 2026 Spark</span>
       </div>
     </div>
   );
