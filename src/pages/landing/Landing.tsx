@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase";
 
 export function Landing() {
   const [scrollY, setScrollY] = useState(0);
@@ -7,6 +8,13 @@ export function Landing() {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        window.location.href = "/home";
+      }
+    });
   }, []);
 
   return (
