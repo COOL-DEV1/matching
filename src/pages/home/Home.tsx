@@ -39,7 +39,7 @@ export function Home() {
     }
   }, [user]);
 
-  const runMatching = async () => {
+  const runMatching = async (forceRefresh = false) => {
     setLoading(true);
     try {
       const {
@@ -59,7 +59,10 @@ export function Home() {
             apikey: LEGACY_ANON_KEY,
             Authorization: `Bearer ${LEGACY_ANON_KEY}`,
           },
-          body: JSON.stringify({ user_id: session.user.id }),
+          body: JSON.stringify({
+            user_id: session.user.id,
+            force_refresh: forceRefresh,
+          }),
         },
       );
 
@@ -187,7 +190,7 @@ export function Home() {
         </div>
         <div style={{ display: "flex", gap: "8px" }}>
           <button
-            onClick={runMatching}
+            onClick={() => runMatching(true)}
             style={{
               padding: "8px 14px",
               background: "#1a1a1a",
@@ -288,7 +291,7 @@ export function Home() {
             더 많은 유저가 가입하면 자동으로 매칭돼요
           </p>
           <button
-            onClick={runMatching}
+            onClick={() => runMatching(true)}
             style={{
               padding: "12px 24px",
               background: "linear-gradient(135deg, #5b21b6, #7C3AED)",
