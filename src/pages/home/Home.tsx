@@ -473,6 +473,7 @@ function MatchCard({
         }}>
         {/* 아바타 */}
         <div
+          onClick={() => (window.location.href = `/profile/${p.id}`)}
           style={{
             width: "52px",
             height: "52px",
@@ -487,6 +488,7 @@ function MatchCard({
             fontSize: "20px",
             color: "#fff",
             fontWeight: 700,
+            cursor: "pointer",
           }}>
           {p.nickname[0]}
         </div>

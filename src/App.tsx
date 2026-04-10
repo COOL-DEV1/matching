@@ -18,6 +18,7 @@ import { ProtectedRoute } from "./common/components/ProtectedRoute";
 import { Landing } from "./pages/landing/Landing";
 import { ForgotPassword } from "./pages/auth/ForgotPassword";
 import { ResetPassword } from "./pages/auth/ResetPassword";
+import { ProfileDetail } from "./pages/profile/ProfileDetail";
 
 function AuthCallback() {
   const navigate = useNavigate();
@@ -109,6 +110,14 @@ function App() {
           }
         />
       </Routes>
+      <Route
+        path="/profile/:userId"
+        element={
+          <ProtectedRoute>
+            <ProfileDetail />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
     </BrowserRouter>
