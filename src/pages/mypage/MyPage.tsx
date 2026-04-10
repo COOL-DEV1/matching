@@ -359,7 +359,7 @@ export function MyPage() {
           padding: "12px 0 24px",
         }}>
         {[
-          { icon: "🏠", label: "홈", path: "/" },
+          { icon: "🏠", label: "홈", path: "/home" },
           { icon: "💬", label: "채팅", path: "/chat" },
           { icon: "👤", label: "MY", path: "/mypage" },
         ].map(({ icon, label, path }) => (

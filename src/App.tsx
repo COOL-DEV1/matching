@@ -15,6 +15,7 @@ import { Chat } from "./pages/chat/Chat";
 import { ChatList } from "./pages/chat/ChatList";
 import { MyPage } from "./pages/mypage/MyPage";
 import { ProtectedRoute } from "./common/components/ProtectedRoute";
+import { Landing } from "./pages/landing/Landing";
 
 function AuthCallback() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ function AuthCallback() {
           type: type as "email",
         });
         if (!error) {
-          navigate("/onboarding", { replace: true });
+          navigate("/home", { replace: true });
           return;
         }
       }
@@ -72,8 +73,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/" element={<Landing />} />
         <Route
-          path="/"
+          path="/home"
           element={
             <ProtectedRoute>
               <Home />
