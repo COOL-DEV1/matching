@@ -16,6 +16,8 @@ import { ChatList } from "./pages/chat/ChatList";
 import { MyPage } from "./pages/mypage/MyPage";
 import { ProtectedRoute } from "./common/components/ProtectedRoute";
 import { Landing } from "./pages/landing/Landing";
+import { ForgotPassword } from "./pages/auth/ForgotPassword";
+import { ResetPassword } from "./pages/auth/ResetPassword";
 
 function AuthCallback() {
   const navigate = useNavigate();
@@ -107,6 +109,8 @@ function App() {
           }
         />
       </Routes>
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
     </BrowserRouter>
   );
 }

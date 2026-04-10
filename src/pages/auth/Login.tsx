@@ -120,6 +120,17 @@ export function Login() {
               <p style={errorStyle}>{errors.password.message}</p>
             )}
           </div>
+          <div style={{ textAlign: "right", marginTop: "6px" }}>
+            <a
+              href="/forgot-password"
+              style={{
+                color: "#C084FC",
+                fontSize: "12px",
+                textDecoration: "none",
+              }}>
+              비밀번호를 잊으셨나요?
+            </a>
+          </div>
 
           {message && (
             <p
