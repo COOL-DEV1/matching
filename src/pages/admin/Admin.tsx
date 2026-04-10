@@ -83,24 +83,42 @@ export function Admin() {
 
   const handleSuspend = async (reportedId: string) => {
     if (!window.confirm("이 유저를 정지하시겠어요?")) return;
-    await supabase
-      .from("profiles")
-      .update({ is_active: false })
-      .eq("id", reportedId);
+
+    const { error } = await supabase.rpc("admin_suspend_user", {
+      target_id: reportedId,
+      suspend: true,
+    });
+
+    if (error) {
+      alert("정지 처리 실패: " + error.message);
+      return;
+    }
+
     await supabase
       .from("reports")
       .update({ status: "resolved" })
-      .eq("reported_id", reportedId);
+      .eq("reported_id", reportedId)
+      .eq("status", "pending");
+
+    alert("정지 처리 완료");
     fetchReports();
     fetchStats();
   };
 
   const handleRestore = async (reportedId: string) => {
     if (!window.confirm("이 유저의 정지를 해제하시겠어요?")) return;
-    await supabase
-      .from("profiles")
-      .update({ is_active: true })
-      .eq("id", reportedId);
+
+    const { error } = await supabase.rpc("admin_suspend_user", {
+      target_id: reportedId,
+      suspend: false,
+    });
+
+    if (error) {
+      alert("정지 해제 실패: " + error.message);
+      return;
+    }
+
+    alert("정지 해제 완료");
     fetchReports();
     fetchStats();
   };
