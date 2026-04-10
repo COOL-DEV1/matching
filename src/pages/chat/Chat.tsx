@@ -80,7 +80,8 @@ export function Chat() {
 
   const sendMessage = async () => {
     if (!input.trim() || !user || !matchId) return;
-    const content = input.trim();
+    const raw = input.trim();
+    const content = filterMessage(raw);
     setInput("");
 
     const { data, error } = await supabase
@@ -94,6 +95,44 @@ export function Chat() {
       return;
     }
     if (data) setMessages((prev) => [...prev, data as Message]);
+  };
+
+  const filterMessage = (text: string): string => {
+    const badWords = [
+      "씨발",
+      "시발",
+      "씨바",
+      "시바",
+      "ㅅㅂ",
+      "개새끼",
+      "개새",
+      "새끼",
+      "ㅅㄲ",
+      "지랄",
+      "ㅈㄹ",
+      "병신",
+      "ㅂㅅ",
+      "미친",
+      "ㅁㅊ",
+      "꺼져",
+      "닥쳐",
+      "좆",
+      "ㅈ같",
+      "창녀",
+      "보지",
+      "자지",
+      "죽어",
+      "죽을",
+      "찐따",
+      "장애",
+    ];
+
+    let filtered = text;
+    badWords.forEach((word) => {
+      const regex = new RegExp(word, "gi");
+      filtered = filtered.replace(regex, "잇힝");
+    });
+    return filtered;
   };
 
   const handleEndChat = async () => {
