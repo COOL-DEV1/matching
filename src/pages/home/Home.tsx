@@ -47,15 +47,17 @@ export function Home() {
       } = await supabase.auth.getSession();
       if (!session) return;
 
+      const LEGACY_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVuZmdqam5rYmN1eXl0dW51aGxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODQwNDcsImV4cCI6MjA5MDY2MDA0N30.6oHRtFwR8zipJwGp76pFVHlHM7AB3amHh9gbF_mqdxo";
+
       const res = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/auto-match`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            apikey:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVuZmdqam5rYmN1eXl0dW51aGxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODQwNDcsImV4cCI6MjA5MDY2MDA0N30.6oHRtFwR8zipJwGp76pFVHlHM7AB3amHh9gbF_mqdxo",
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVuZmdqam5rYmN1eXl0dW51aGxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODQwNDcsImV4cCI6MjA5MDY2MDA0N30.6oHRtFwR8zipJwGp76pFVHlHM7AB3amHh9gbF_mqdxo`,
+            apikey: LEGACY_ANON_KEY,
+            Authorization: `Bearer ${LEGACY_ANON_KEY}`,
           },
           body: JSON.stringify({ user_id: session.user.id }),
         },
