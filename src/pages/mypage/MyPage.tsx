@@ -61,7 +61,8 @@ export function MyPage() {
     const { count } = await supabase
       .from("matches")
       .select("*", { count: "exact", head: true })
-      .or(`user1.eq.${user?.id},user2.eq.${user?.id}`);
+      .or(`user1.eq.${user?.id},user2.eq.${user?.id}`)
+      .eq("is_active", true);
     setMatchCount(count || 0);
   };
 
