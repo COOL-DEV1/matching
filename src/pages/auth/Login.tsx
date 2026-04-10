@@ -45,6 +45,20 @@ export function Login() {
       return;
     }
 
+    // 정지 여부 체크 (여기 추가)
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_active")
+      .eq("id", authData.user.id)
+      .single();
+
+    if (profile && profile.is_active === false) {
+      await supabase.auth.signOut();
+      setMessage("계정이 정지되었습니다. 문의: spark@gmail.com");
+      setLoading(false);
+      return;
+    }
+
     window.location.href = "/home";
     setLoading(false);
   };
