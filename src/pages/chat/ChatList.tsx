@@ -49,13 +49,14 @@ export function ChatList() {
         .eq("id", otherId)
         .single();
 
-      const { data: lastMsg } = await supabase
+      const { data: lastMsgs } = await supabase
         .from("messages")
         .select("content, created_at, is_read, sender_id")
         .eq("match_id", match.id)
         .order("created_at", { ascending: false })
-        .limit(1)
-        .single();
+        .limit(1);
+
+      const lastMsg = lastMsgs?.[0] || null;
 
       const { count } = await supabase
         .from("messages")
