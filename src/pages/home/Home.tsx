@@ -53,8 +53,9 @@ export function Home() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+            apikey:
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVuZmdqam5rYmN1eXl0dW51aGxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODQwNDcsImV4cCI6MjA5MDY2MDA0N30.6oHRtFwR8zipJwGp76pFVHlHM7AB3amHh9gbF_mqdxo",
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVuZmdqam5rYmN1eXl0dW51aGxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODQwNDcsImV4cCI6MjA5MDY2MDA0N30.6oHRtFwR8zipJwGp76pFVHlHM7AB3amHh9gbF_mqdxo`,
           },
           body: JSON.stringify({ user_id: session.user.id }),
         },
