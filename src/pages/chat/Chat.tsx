@@ -92,11 +92,25 @@ export function Chat() {
     const content = input.trim();
     setInput("");
 
-    await supabase.from("messages").insert({
-      match_id: matchId,
-      sender_id: user.id,
-      content,
-    });
+    const { data, error } = await supabase
+      .from("messages")
+      .insert({
+        match_id: matchId,
+        sender_id: user.id,
+        content,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("메시지 전송 에러:", error);
+      return;
+    }
+
+    // 낙관적 업데이트 - 바로 화면에 추가
+    if (data) {
+      setMessages((prev) => [...prev, data as Message]);
+    }
   };
 
   const getAge = (birth: string) =>
