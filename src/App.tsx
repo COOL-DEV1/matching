@@ -65,8 +65,11 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Landing />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route
           path="/onboarding"
@@ -76,7 +79,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/" element={<Landing />} />
         <Route
           path="/home"
           element={
@@ -109,17 +111,15 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/profile/:userId"
+          element={
+            <ProtectedRoute>
+              <ProfileDetail />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
-      <Route
-        path="/profile/:userId"
-        element={
-          <ProtectedRoute>
-            <ProfileDetail />
-          </ProtectedRoute>
-        }
-      />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
     </BrowserRouter>
   );
 }
