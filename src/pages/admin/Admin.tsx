@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../common/hooks/useAuth";
 
-const ADMIN_EMAIL = "seewon3342@gmail.com"; // 관리자 이메일
-
 type Report = {
   id: string;
   reporter_id: string;
@@ -35,12 +33,24 @@ export function Admin() {
 
   useEffect(() => {
     if (!user) return;
-    if (user.email !== ADMIN_EMAIL) {
-      navigate("/home");
-      return;
-    }
-    fetchReports();
-    fetchStats();
+
+    const checkAdminAndLoad = async () => {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("is_admin")
+        .eq("id", user.id)
+        .single();
+
+      if (!profile?.is_admin) {
+        navigate("/home");
+        return;
+      }
+
+      fetchReports();
+      fetchStats();
+    };
+
+    checkAdminAndLoad();
   }, [user]);
 
   const fetchReports = async () => {
